@@ -42,6 +42,12 @@ class msentitypascalCQRS {
         "apiidcamellc.graphql.mutation.msnamepascalCreatemsentitypascal": { fn: instance.createmsentitypascal$, instance, jwtValidation: { roles: WRITE_ROLES, attributes: REQUIRED_ATTRIBUTES } },
         "apiidcamellc.graphql.mutation.msnamepascalUpdatemsentitypascalGeneralInfo": { fn: instance.updatemsentitypascalGeneralInfo$, jwtValidation: { roles: WRITE_ROLES, attributes: REQUIRED_ATTRIBUTES } },
         "apiidcamellc.graphql.mutation.msnamepascalUpdatemsentitypascalState": { fn: instance.updatemsentitypascalState$, jwtValidation: { roles: WRITE_ROLES, attributes: REQUIRED_ATTRIBUTES } },
+      },
+      alarm:{
+        "emigateway.graphql.mutation.playsound":{ 
+          fn: instance.playsound$, 
+          jwtValidation: { roles: WRITE_ROLES, attributes: REQUIRED_ATTRIBUTES } 
+        }
       }
     }
   };
