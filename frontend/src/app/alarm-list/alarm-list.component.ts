@@ -10,7 +10,38 @@ import { fromEvent, Subject, combineLatest, merge, interval, of } from 'rxjs';
 })
 export class AlarmListComponent implements OnInit {
 
-  alarmList = ['Santa', 'Anderson', 'Jarris', 'cristian']
+  alarmList = [
+    { 
+      timestamp: 0,
+      time: '8:30',
+      format: 'am',
+      active: false
+    },
+    { 
+      timestamp: 0,
+      time: '4:30',
+      format: 'am',
+      active: true
+    },
+    { 
+      timestamp: 0,
+      time: '4:35',
+      format: 'am',
+      active: false
+    },
+    { 
+      timestamp: 0,
+      time: '4:40',
+      format: 'am',
+      active: true
+    },
+    { 
+      timestamp: 0,
+      time: '4:50',
+      format: 'am',
+      active: false
+    },
+];
 
   constructor(private alarmListService: AlarmListService) {
 
@@ -20,6 +51,10 @@ export class AlarmListComponent implements OnInit {
 
 
 
+  }
+
+  goToSettings(){
+    console.log('HAY QUE IR AL COMPONENTE DE LA CONFIGURARCION');
   }
 
 }

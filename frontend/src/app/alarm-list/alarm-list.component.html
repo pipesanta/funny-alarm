@@ -1,23 +1,45 @@
-<div fxLayout="column">
+<div class="main" fxLayout="column">
     <div>
-        encabezado no se que
+        <span fxFlex></span>
+
+        <button mat-icon-button (click)="goToSettings()">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+
     </div>
 
-    <div *ngFor="let item of alarmList" class="alarm">
-        <span>{{ 'item algo ==> ' + item }} </span>
-        <span fxFlex></span>
-        <button mat-icon-button color="primary">
-            <mat-icon>favorite</mat-icon>
-        </button>
-        <button mat-icon-button color="primary">
-            <mat-icon>delete</mat-icon>
-        </button>
-        <button mat-icon-button color="primary">
-            <mat-icon>favorite</mat-icon>
-        </button>
-        <button mat-icon-button color="primary">
-            <mat-icon>favorite</mat-icon>
-        </button>
+    <div *ngFor="let item of alarmList" fxLayout="row wrap" class="alarmItem">
+        <div fxFlex="100" fxLayoutAlign="space-between center">
+            <span class="time">
+                {{ item.time }}
+            </span>
+            <span class="time-format">
+                {{  item.format }}
+            </span>
+            <mat-slide-toggle color="primary" [checked]="item.active">
+            </mat-slide-toggle>
+        </div>
+        <div fxFlex="100">
+            <!-- <div class="selected-days">
+                lunes, martes, sabado
+            </div>
+            <div>
+
+            </div> -->
+            <mat-expansion-panel (opened)="true" (closed)="false">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                       lunes, martes, 
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                
+                <div>
+                    contenidop
+                </div>
+            </mat-expansion-panel>
+
+        </div>
+
 
     </div>
 </div>

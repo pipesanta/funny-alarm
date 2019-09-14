@@ -1,4 +1,18 @@
-.alarm{
+.alarmItem{
     background: rgb(189, 156, 156);
     margin: 5px;
+    border: 3px;
+    border-radius: 15px;
+}
+
+.main{
+    margin: 0px;
+}
+
+.time{
+    font-size: 40px;
+}
+
+.time-format{
+    font-size: 15px;
 }
