@@ -2,15 +2,15 @@
 
 const Rx = require('rxjs');
 
-const msentitypascalDA = require("./msentitypascalDA");
+const AlarmDA = require("./AlarmDA");
 
 module.exports = {
   /**
    * Data-Access start workflow
    */
-  start$: Rx.concat(msentitypascalDA.start$()),
+  start$: Rx.concat(AlarmDAteam.start$()),
   /**
    * @returns {msentitypascalDA}
    */
-  msentitypascalDA,
+  AlarmDA,
 };

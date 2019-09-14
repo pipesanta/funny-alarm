@@ -2,14 +2,14 @@
 
 const { bindNodeCallback, Observable } = require("rxjs");
 const { map } = require("rxjs/operators");
-const MongoClient = require("mongodb").MongoClient;
+// const MongoClient = require("mongodb").MongoClient;
 const { ConsoleLogger } = require('@nebulae/backend-node-tools').log;
 
 let instance = null;
 
-class MongoDB {
+class BasicDB {
   /**
-   * initialize and configure Mongo DB
+   * initialize and configure Basic DB
    * @param { { url, dbName } } ops
    */
   constructor({ url, dbName }) {
@@ -27,7 +27,7 @@ class MongoDB {
         ConsoleLogger.i(this.url);
         this.client = client;
         this.db = this.client.db(this.dbName);
-        return `MongoDB connected to dbName= ${this.dbName}`;
+        return `BasicDB connected to dbName= ${this.dbName}`;
       })
     );
   }
@@ -39,7 +39,7 @@ class MongoDB {
   stop$() {
     return Observable.create(observer => {
       this.client.close();
-      observer.next("Mongo DB Client closed");
+      observer.next("Basic DB Client closed");
       observer.complete();
     });
   }
@@ -88,14 +88,14 @@ class MongoDB {
 }
 
 module.exports = {
-  MongoDB,
+  BasicDB,
   singleton() {
     if (!instance) {
-      instance = new MongoDB({
+      instance = new BasicDB({
         url: process.env.MONGODB_URL,
         dbName: process.env.MONGODB_DB_NAME
       });
-      ConsoleLogger.i(`MongoDB instance created: ${process.env.MONGODB_DB_NAME}`);
+      ConsoleLogger.i(`BasicDB instance created: ${process.env.MONGODB_DB_NAME}`);
     }
     return instance;
   }

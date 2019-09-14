@@ -1,31 +1,31 @@
 "use strict";
 
 const { concat } = require("rxjs");
-const mongoDB = require("./MongoDB").singleton();
+const basicDB = require("./BasicDB").singleton();
 
 module.exports = {
   /**
    * start workflow
    * @returns {Observable}
    */
-  start$: mongoDB.start$(),
+  start$: basicDB.start$(),
   /**
    * start for syncing workflow
    * @returns {Observable}
    */
-  startForSyncing$: mongoDB.start$(),
+  startForSyncing$: basicDB.start$(),
   /**
    * start for getting ready workflow
    * @returns {Observable}
    */
-  startForGettingReady$: concat(mongoDB.start$(),mongoDB.createIndexes$()),
+  startForGettingReady$: concat(basicDB.start$(),basicDB.createIndexes$()),
   /**
    * Stop workflow
    * @returns {Observable}
    */
-  stop$: mongoDB.stop$(),
+  stop$: basicDB.stop$(),
   /**
-   * @returns {mongoDB}
+   * @returns {basicDB}
    */
-  mongoDB,
+  basicDB,
 };

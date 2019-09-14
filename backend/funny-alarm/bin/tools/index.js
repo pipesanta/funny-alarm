@@ -7,7 +7,7 @@ const { concat, Observable } = require("rxjs");
  * Please add any new tools to this list
  */
 const tools = {
-    MongoDB: require("./mongo-db"),
+    NeDB: require("./NeDB"),
     EventSourcing: require("./event-sourcing"),
 };
 

@@ -1,0 +1,73 @@
+
+
+type Location{
+  xPx: Int
+  yPx: Int
+  xTile: Int
+  yTile: Int
+}
+
+type MutationResponse {
+  code: String
+}
+
+input LocationInput{
+  xPx: Int
+  yPx: Int
+  xTile: Int
+  yTile: Int
+}
+
+input BombInput{
+  _id: String
+  placed: BigInt
+  exploit: BigInt
+  location: LocationInput
+}
+
+type Bomb{
+  _id: String
+  placed: BigInt
+  exploit: BigInt
+  location: Location
+}
+
+type Player {
+  _id: String
+  location: Location,
+  name: String,
+  image: String
+  state: String
+  code: String
+  user_id: String
+  character: Int
+  xPosition: Int
+  yPosition: Int
+}
+
+type LoginToGameResponse {
+  code: String
+  user_id: String
+  character: Int
+}
+
+type Query {
+  # "return Tags Array using paginator methods"
+  getMessages(limit: Int): [String]
+}
+
+type Mutation{
+  "Place a bomb"
+  placeBomb(bomb: BombInput): Int
+  loginToGame: LoginToGameResponse
+  notifyPlayerUpdates(id: String, x: Int, y: Int): MutationResponse
+}
+
+
+type Subscription {
+  "Listen bomb Placed on map by others players"
+  listenPlacedBombs: [Bomb]
+
+  "listen player game over"
+  playerUpdates: Player
+}

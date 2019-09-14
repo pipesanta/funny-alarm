@@ -1,18 +1,31 @@
-const Datastore = require('nedb');
-const users = new Datastore({ filename: 'users.db', autoload: true });
+"use strict";
 
-// const users = new Datastore();
+const { concat } = require("rxjs");
+const NeDB = require("./NeDB").singleton();
 
-const scott = {
-    name: 'Scott',
-    twitter: '@ScottWRobinson1'
+module.exports = {
+  /**
+   * start workflow
+   * @returns {Observable}
+   */
+  start$: NeDB.start$(),
+  /**
+   * start for syncing workflow
+   * @returns {Observable}
+   */
+  startForSyncing$: NeDB.start$(),
+  /**
+   * start for getting ready workflow
+   * @returns {Observable}
+   */
+  startForGettingReady$: concat(NeDB.start$(),NeDB.createIndexes$()),
+  /**
+   * Stop workflow
+   * @returns {Observable}
+   */
+  stop$: NeDB.stop$(),
+  /**
+   * @returns {NeDB}
+   */
+  NeDB,
 };
-
-// users.insert(scott, function(err, doc) {
-//     console.log('Inserted', doc.name, 'with ID', doc._id);
-// });
-
-
-users.findOne({ twitter: '@ScottWRobinson12' }, function(err, doc) {
-    console.log('Found user:', doc);
-});
