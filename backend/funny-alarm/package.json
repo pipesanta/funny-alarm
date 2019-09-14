@@ -30,8 +30,10 @@
     "@nebulae/backend-node-tools": "0.0.3",
     "@nebulae/event-store": "^1.1.2",
     "dotenv": "^5.0.1",
+    "google-tts-api": "0.0.4",
     "jsonwebtoken": "^8.2.1",
     "nedb": "^1.8.0",
+    "node-mp3-player": "^1.0.3",
     "rxjs": "^6.3.3",
     "uuid": "^3.3.2"
   }
