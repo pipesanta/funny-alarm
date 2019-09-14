@@ -10,6 +10,7 @@ import { fromEvent, Subject, combineLatest, merge, interval, of } from 'rxjs';
 })
 export class AlarmListComponent implements OnInit {
 
+  alarmList = ['Santa', 'Anderson', 'Jarris', 'cristian']
 
   constructor(private alarmListService: AlarmListService) {
 
