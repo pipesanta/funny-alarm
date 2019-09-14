@@ -1,18 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
-import * as Rx from 'rxjs';
 import { GatewayService } from '../api/gateway.service';
 import {
   loginToGame,
   playerUpdates,
   notifyPlayerUpdates
-} from './gql/udeaBombWar.js';
+} from './gql/alarm-list.js';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
-export class UdeaBombWarService {
+export class AlarmListService {
 
-  static COMMAND_EXPLOIT_BOMB = 1;
 
   screenSizeChanged$ = new BehaviorSubject(undefined);
   commands$ = new BehaviorSubject(undefined);

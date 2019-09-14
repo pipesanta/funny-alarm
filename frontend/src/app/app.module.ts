@@ -6,8 +6,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppComponent } from './app.component';
 import { MaterialModule } from './material.module';
-import { UdeaBombWarComponent } from './udea-bomb-war/udea-bomb-war.component';
-import { UdeaBombWarService } from './udea-bomb-war/udea-bomb-war.service';
+import { AlarmListComponent } from './alarm-list/alarm-list.component';
+import { AlarmListService } from './alarm-list/alarm-list.service';
 import { GatewayService } from './api/gateway.service';
 import { Apollo, ApolloModule } from 'apollo-angular';
 import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
@@ -17,7 +17,7 @@ import { HttpClient, HttpHandler, HttpClientModule } from '@angular/common/http'
 @NgModule({
   declarations: [
     AppComponent,
-    UdeaBombWarComponent,
+    AlarmListComponent,
   ],
   imports: [
     BrowserModule,
@@ -28,7 +28,7 @@ import { HttpClient, HttpHandler, HttpClientModule } from '@angular/common/http'
     ApolloModule,
     HttpLinkModule,
   ],
-  providers: [UdeaBombWarService, GatewayService],
+  providers: [AlarmListService, GatewayService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

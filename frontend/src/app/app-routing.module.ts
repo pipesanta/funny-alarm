@@ -1,10 +1,19 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { UdeaBombWarComponent } from './udea-bomb-war/udea-bomb-war.component';
+import { AlarmListComponent } from './alarm-list/alarm-list.component';
+
 
 const routes: Routes = [
   {
-    path: '', component: UdeaBombWarComponent
+    path: '', component: AlarmListComponent
+  },
+  {
+    path: 'alarm-detail',
+    component: AlarmListComponent
+  },
+  {
+    path: '**',
+    redirectTo: ''
   }
 ];
 
