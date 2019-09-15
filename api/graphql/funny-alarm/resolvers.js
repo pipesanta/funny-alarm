@@ -10,7 +10,6 @@ function getResponseFromBackEnd$(response) {
       const err = new Error();
       err.name = "Error";
       err.message = resp.result.error;
-      // this[Symbol()] = resp.result.error;
       Error.captureStackTrace(err, "Error");
       throw err;
     }
@@ -22,15 +21,14 @@ module.exports = {
   //// QUERY ///////
 
   Query: {
-    getMessages(root, args, context) {
+    getAlarms(root, args, context) {
       console.log(root, args);
       return broker.forwardAndGetReply$(
-          "ChatMessage",
-          "gateway.graphql.query.getMessages",
+          "Alarm",
+          "gateway.graphql.query.getAlarms",
           { root, args, jwt: context.encodedToken },
           2000
       )
-      // return Rx.Observable.of({ result: { code: 200 }, data: ['mensaje_1', 'mensajae 2'] })
         .mergeMap(response => getResponseFromBackEnd$(response))
         .toPromise();
     }
@@ -38,87 +36,51 @@ module.exports = {
 
   //// MUTATIONS ///////
   Mutation: {
-    placeBomb(root, args, context) {
+    createAlarm(root, args, context) {
       return context.broker.forwardAndGetReply$(
-        "Bomb",
-        "gateway.graphql.mutation.placeBomb",
+        "Alarm",
+        "gateway.graphql.mutation.createAlarm",
         { root, args, jwt: context.encodedToken },
         2000
       )
-      // return Rx.Observable.of({ result: { code: 200 }, data: 'texto de confirmacion' })
-        // .catch(err => handleError$(err, "persistBasicInfoTag"))
         .mergeMap(response => getResponseFromBackEnd$(response))
         .toPromise();
     },
-    loginToGame(root, args, context) {
+    updateAlarm(root, args, context) {
       return context.broker.forwardAndGetReply$(
-        "Bomb",
-        "gateway.graphql.mutation.loginToGame",
+        "Alarm",
+        "gateway.graphql.mutation.updateAlarm",
         { root, args, jwt: context.encodedToken },
         2000
       )
-      // return Rx.Observable.of({ result: { code: 200 }, data: 'texto de confirmacion' })
-        // .catch(err => handleError$(err, "persistBasicInfoTag"))
         .mergeMap(response => getResponseFromBackEnd$(response))
         .toPromise();
-    },
-    notifyPlayerUpdates(root, args, context) {
-      return context.broker.forwardAndGetReply$(
-        "Player",
-        "gateway.graphql.mutation.notifyPlayerUpdates",
-        { root, args, jwt: context.encodedToken },
-        2000
-      )
-      // return Rx.Observable.of({ result: { code: 200 }, data: 'texto de confirmacion' })
-        // .catch(err => handleError$(err, "persistBasicInfoTag"))
-        .mergeMap(response => getResponseFromBackEnd$(response))
-        .toPromise();
-    },
+    }
   },
   // SUBSCRIPTIONS ///////
-  Subscription: {
-    listenPlacedBombs: {
-      subscribe: withFilter(
-        (payload, variables, context, info) => {
-          return pubsub.asyncIterator("listenPlacedBombs");
-        },
-        (payload, variables, context, info) => {
-          return true;
-        }
-      )
-    },
-    playerUpdates: {
-      subscribe: withFilter(
-        (payload, variables, context, info) => {
-          return pubsub.asyncIterator("playerUpdates");
-        },
-        (payload, variables, context, info) => {
-          return true;
-        }
-      )
-    },
-
-
-  }
+  // Subscription: {
+  //   listenPlacedBombs: {
+  //     subscribe: withFilter(
+  //       (payload, variables, context, info) => {
+  //         return pubsub.asyncIterator("listenPlacedBombs");
+  //       },
+  //       (payload, variables, context, info) => {
+  //         return true;
+  //       }
+  //     )
+  //   }
+  // }
 };
 
 //// SUBSCRIPTIONS SOURCES ////
 const eventDescriptors = [
   {
-    backendEventName: 'bombPlacedOnMap',
-    gqlSubscriptionName: 'listenPlacedBombs',
+    // backendEventName: 'bombPlacedOnMap',
+    // gqlSubscriptionName: 'listenPlacedBombs',
     //dataExtractor: (evt) => evt.data,// OPTIONAL, only use if needed
     //onError: (error, descriptor) => console.log(`Error processing ${descriptor.backendEventName}`),// OPTIONAL, only use if needed
     //onEvent: (evt, descriptor) => console.log(`Event of type  ${descriptor.backendEventName} arraived: ${JSON.stringify(evt)}`),// OPTIONAL, only use if needed
-  },
-  {
-    backendEventName: 'playerUpdated',
-    gqlSubscriptionName: 'playerUpdates',
-    //dataExtractor: (evt) => evt.data,// OPTIONAL, only use if needed
-    //onError: (error, descriptor) => console.log(`Error processing ${descriptor.backendEventName}`),// OPTIONAL, only use if needed
-    //onEvent: (evt, descriptor) => console.log(`Event of type  ${descriptor.backendEventName} arraived: ${JSON.stringify(evt)}`),// OPTIONAL, only use if needed
-  },
-
+  }
 ];
 
 /**
