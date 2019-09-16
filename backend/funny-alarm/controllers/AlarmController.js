@@ -20,7 +20,10 @@ exports.welcomeMessage = (req, res) => {
   }
   const requestParams = req.params || {};
   const requestBody = req.body || {};
-  res.status(200).send("Gateway Route created For Alarm domain");
+  res.status(200).json({
+    code: 200,
+    msg: "Gateway Route created For Alarm domain"
+  });
 };
 
 exports.getAlarms = (req, res) => {
@@ -48,9 +51,18 @@ exports.createAlarm = (req, res) => {
   }
   const requestParams = req.params || {};
   const requestBody = req.body || {};
-  console.log({ requestParams, requestBody });
+  console.log({requestBody, requestParams});
 
-  res.status(200).json({ response: 'NO IMPLEMENTADO' });
+  
+  const newAlarm = requestBody.alarm;
+
+  NeDB.alarmCollection.insert(newAlarm, (err, doc) => {
+    if(err){
+      res.status(502).send(err)
+    }
+    res.status(200).json(doc);
+  });
+
 };
 exports.updateAlarm = (req, res) => {
   if (!req) {

@@ -8,7 +8,6 @@ import { AppComponent } from './app.component';
 import { MaterialModule } from './material.module';
 import { AlarmListComponent } from './alarm-list/alarm-list.component';
 import { AlarmListService } from './alarm-list/alarm-list.service';
-import { GatewayService } from './api/gateway.service';
 import { Apollo, ApolloModule } from 'apollo-angular';
 import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
 import { HttpClient, HttpHandler, HttpClientModule } from '@angular/common/http';
@@ -28,7 +27,7 @@ import { HttpClient, HttpHandler, HttpClientModule } from '@angular/common/http'
     ApolloModule,
     HttpLinkModule,
   ],
-  providers: [AlarmListService, GatewayService],
+  providers: [AlarmListService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
