@@ -8,8 +8,6 @@ import { AppComponent } from './app.component';
 import { MaterialModule } from './material.module';
 import { AlarmListComponent } from './alarm-list/alarm-list.component';
 import { AlarmListService } from './alarm-list/alarm-list.service';
-import { Apollo, ApolloModule } from 'apollo-angular';
-import { HttpLink, HttpLinkModule } from 'apollo-angular-link-http';
 import { HttpClient, HttpHandler, HttpClientModule } from '@angular/common/http';
 
 
@@ -24,8 +22,6 @@ import { HttpClient, HttpHandler, HttpClientModule } from '@angular/common/http'
     BrowserAnimationsModule,
     HttpClientModule,
     MaterialModule,
-    ApolloModule,
-    HttpLinkModule,
   ],
   providers: [AlarmListService],
   bootstrap: [AppComponent]
