@@ -10,6 +10,8 @@ import { AlarmListComponent } from './alarm-list/alarm-list.component';
 import { AlarmListService } from './alarm-list/alarm-list.service';
 import { HttpClient, HttpHandler, HttpClientModule } from '@angular/common/http';
 
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+
 
 @NgModule({
   declarations: [
@@ -22,6 +24,7 @@ import { HttpClient, HttpHandler, HttpClientModule } from '@angular/common/http'
     BrowserAnimationsModule,
     HttpClientModule,
     MaterialModule,
+    FormsModule, ReactiveFormsModule
   ],
   providers: [AlarmListService],
   bootstrap: [AppComponent]

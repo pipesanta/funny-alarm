@@ -8,6 +8,12 @@
 
     </div>
 
+    <mat-form-field>
+        <input matInput [formControl]="alarmName"  placeholder="ponga el nombre de la alarma">
+    </mat-form-field>
+
+    <button mat-stroked-button color="primary" (click)="createNewAlarm()">Crear Alarma cualquiera</button>
+
     <div *ngFor="let item of alarmList" fxLayout="row wrap" class="alarmItem">
         <div fxFlex="100" fxLayoutAlign="space-between center">
             <span class="time">
@@ -29,10 +35,10 @@
             <mat-expansion-panel (opened)="true" (closed)="false">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
-                       lunes, martes, 
+                        lunes, martes,
                     </mat-panel-title>
                 </mat-expansion-panel-header>
-                
+
                 <div>
                     contenidop
                 </div>
