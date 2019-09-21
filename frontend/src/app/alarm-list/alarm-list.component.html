@@ -1,21 +1,23 @@
-<div class="main" fxLayout="column">
-    <div>
-        <span fxFlex></span>
-
+<div class="main">
+    <div class="header">
         <button mat-icon-button (click)="goToSettings()">
             <mat-icon>more_vert</mat-icon>
         </button>
-
     </div>
 
     <mat-form-field>
-        <input matInput [formControl]="alarmName"  placeholder="ponga el nombre de la alarma">
+        <input matInput [formControl]="alarmName" placeholder="ponga el nombre de la alarma">
     </mat-form-field>
 
-    <button mat-stroked-button color="primary" (click)="createNewAlarm()">Crear Alarma cualquiera</button>
+    <div>
+        <button mat-stroked-button color="primary" (click)="createNewAlarm()">Crear Alarma cualquiera</button>
+    </div>
 
-    <div *ngFor="let item of alarmList" fxLayout="row wrap" class="alarmItem">
-        <div fxFlex="100" fxLayoutAlign="space-between center">
+    <button (click)="open()">Time</button>
+    <input type="time" value="{{selectedTime}}">
+
+    <div *ngFor="let item of alarmList" class="alarmItem">
+        <div>
             <span class="time">
                 {{ item.time }}
             </span>
@@ -25,7 +27,7 @@
             <mat-slide-toggle color="primary" [checked]="item.active">
             </mat-slide-toggle>
         </div>
-        <div fxFlex="100">
+        <div>
             <!-- <div class="selected-days">
                 lunes, martes, sabado
             </div>

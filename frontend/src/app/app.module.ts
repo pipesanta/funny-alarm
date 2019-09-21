@@ -8,9 +8,10 @@ import { AppComponent } from './app.component';
 import { MaterialModule } from './material.module';
 import { AlarmListComponent } from './alarm-list/alarm-list.component';
 import { AlarmListService } from './alarm-list/alarm-list.service';
-import { HttpClient, HttpHandler, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { AmazingTimePickerModule } from 'amazing-time-picker';
 
 
 @NgModule({
@@ -24,7 +25,9 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     BrowserAnimationsModule,
     HttpClientModule,
     MaterialModule,
-    FormsModule, ReactiveFormsModule
+    FormsModule,
+    ReactiveFormsModule,
+    AmazingTimePickerModule
   ],
   providers: [AlarmListService],
   bootstrap: [AppComponent]

@@ -7,6 +7,15 @@
 
 .main{
     margin: 0px;
+    display: flex;
+    flex-direction: column;
+
+    .header{
+        display: flex;
+        justify-content: flex-end;
+        background: peru;
+        
+    }
 }
 
 .time{
