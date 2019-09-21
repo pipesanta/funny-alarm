@@ -33,16 +33,13 @@ exports.getAlarms = (req, res) => {
   const requestParams = req.params || {};
   const requestBody = req.body || {};
   console.log({ requestParams, requestBody });
-  const newAlarm =  {
-     name: 'casa' 
-  }
-  NeDB.alarmCollection.insert(newAlarm, (err, doc) => {
-    if(err){
+  NeDB.alarmCollection.find({}, (err, docs) => {
+    if (err) {
       res.status(502).send(err)
     }
-    res.status(200).json(doc);
+    res.status(200).json(docs);
   });
-  
+
 };
 
 exports.createAlarm = (req, res) => {
@@ -51,14 +48,16 @@ exports.createAlarm = (req, res) => {
   }
   const requestParams = req.params || {};
   const requestBody = req.body || {};
-  console.log({requestBody, requestParams});
+  console.log({ requestBody, requestParams });
 
-  
-  const newAlarm = requestBody.alarm;
+
+  const newAlarm = requestBody;
+  //Faltan hacer validaciones 
 
   NeDB.alarmCollection.insert(newAlarm, (err, doc) => {
-    if(err){
-      res.status(502).send(err)
+    if (err) {
+      console.log(err);
+      res.status(502).send(err);
     }
     res.status(200).json(doc);
   });
@@ -71,7 +70,21 @@ exports.updateAlarm = (req, res) => {
   const requestParams = req.params || {};
   const requestBody = req.body || {};
 
-  res.status(200).json({ response: 'NO IMPLEMENTADO' });
+  const idUpdate = requestBody._id;
+
+
+  NeDB.alarmCollection.update({ _id: idUpdate }, {
+    $set: {
+      ...requestBody
+    }
+  }, { multi: true }, (err, numReplaced) => {
+    if (err) {
+      res.send(500);
+      console.log("Error al actualizar alarma", err);
+    }
+    res.status(200).json(numReplaced);
+    console.log("El documento se actualizó con éxito", idUpdate, numReplaced);
+  });
 };
 
 exports.deleteAlarm = (req, res) => {
@@ -80,8 +93,16 @@ exports.deleteAlarm = (req, res) => {
   }
   const requestParams = req.params || {};
   const requestBody = req.body || {};
+  const id_remove = requestBody._id;
 
-  res.status(200).json({ response: 'NO IMPLEMENTADO' });
+  NeDB.alarmCollection.remove({ _id: id_remove }, {}, (err, numRemoved) => {
+    if (err) {
+      res.send(500);
+      console.log("Error al eliminar alarma", err);
+    }
+    res.status(200).json(numRemoved);
+    console.log("El documento se borró con éxito", id_remove, numRemoved)
+  });
 };
 
 
