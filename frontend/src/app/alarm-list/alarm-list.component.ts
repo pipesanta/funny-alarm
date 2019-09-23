@@ -3,7 +3,6 @@ import { AlarmListService } from './alarm-list.service';
 import { map, filter, debounceTime, tap, takeUntil, mergeMap, timeout, switchMap } from 'rxjs/operators';
 import { fromEvent, Subject, combineLatest, merge, interval, of } from 'rxjs';
 import { FormControl } from '@angular/forms';
-import { AmazingTimePickerService } from 'amazing-time-picker';
 
 @Component({
   selector: 'alarm-list',
@@ -12,21 +11,45 @@ import { AmazingTimePickerService } from 'amazing-time-picker';
 })
 export class AlarmListComponent implements OnInit {
 
+  selectedScreem = 'main';
+  selectedAlarm: any;
+
+  daysOfWeek = [
+    { key: 'Dom', label: 'D', value: 'Domingo', active: false },
+    { key: 'Lun', label: 'L', value: 'Lunes', active: true },
+    { key: 'Mar', label: 'M', value: 'Martes', active: false },
+    { key: 'Mie', label: 'M', value: 'Miercoles', active: true },
+    { key: 'Jue', label: 'J', value: 'Jueves', active: false },
+    { key: 'Vie', label: 'V', value: 'Viernes', active: false },
+    { key: 'Sab', label: 'S', value: 'Sabado', active: false }
+  ];
+
   alarmList = [
     {
+      _id: 'id_fake',
       time: '12:34',
       format: '24H',
-      active: true
+      active: true,
+      days: ['Lun', 'Mar', 'Mier'],
+      showDetails: false,
+      showDaysToRepeat: false,
+      tone: {
+        name: 'La Vaca loca'
+      }
     }
   ];
 
   alarmName = new FormControl('');
+  toneNameInput = new FormControl('');
+  toneBodyInput = new FormControl('');
+
   selectedTime = '18:33';
 
+  showControlsToCreateTone = false;
+
   constructor(
-    private alarmListService: AlarmListService,
-    private atp: AmazingTimePickerService
-    ) {
+    private alarmListService: AlarmListService
+  ) {
 
   }
 
@@ -107,18 +130,54 @@ export class AlarmListComponent implements OnInit {
 
 
 
-  open() {
-    const amazingTimePicker = this.atp.open({
-        time:  this.selectedTime,
-        theme: 'dark',
-        arrowStyle: {
-            background: 'red',
-            color: 'white'
-        }
-    });
-    amazingTimePicker.afterClose().subscribe(time => {
-        this.selectedTime = time;
-    });
-}
+  openTimeSelection(alarmItem) {
+    console.log('on openTimeSelection', alarmItem);
+    // const amazingTimePicker = this.atp.open({
+    //     time:  this.selectedTime,
+    //     theme: 'dark',
+    //     arrowStyle: {
+    //         background: 'red',
+    //         color: 'white'
+    //     }
+    // });
+    // amazingTimePicker.afterClose().subscribe(time => {
+    //     this.selectedTime = time;
+    // });
+  }
+
+  updateActiveStatus(alarmId, event: any) {
+    console.log('on updateActiveStatus  => ', alarmId, event.checked);
+
+    //method to disactive an alarm
+
+
+  }
+
+  logEvent(e) {
+    // item.showDaysToRepeat = $event.checked
+    console.log(e);
+
+  }
+
+  openSelectionToneScreen(alarm){
+    this.selectedScreem = 'soundSelection';
+    this.selectedAlarm = alarm;
+  }
+
+  updateDaysToRepeat(alarm, dayKey) {
+    console.log({ alarm, dayKey })
+  }
+
+  assignNewAlarmTone(){
+
+    console.log('assignNewAlarmTone ===> ', this.toneNameInput.value, this.toneNameInput.value );
+    this.selectedScreem = 'main'
+  }
+
+  setToneToAlarm(tone){
+    console.log('on setToneToAlarm', tone);
+    this.selectedScreem = 'main';
+    
+  }
 
 }

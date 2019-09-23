@@ -6,9 +6,12 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatInputModule} from '@angular/material/input';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
 
 
-const MODULES = [ MatButtonModule, MatIconModule, MatMenuModule, MatSlideToggleModule, MatExpansionModule, MatInputModule];
+const MODULES = [ MatButtonModule, MatIconModule, MatMenuModule, MatSlideToggleModule,
+   MatExpansionModule, MatInputModule, MatCheckboxModule, MatButtonToggleModule];
 
 @NgModule({
   imports: MODULES,

@@ -1,27 +1,148 @@
-.alarmItem{
-    background: rgb(189, 156, 156);
+.alarmItem {
+    background: rgb(232, 242, 255);
     margin: 5px;
     border: 3px;
     border-radius: 15px;
+
+    .mat-exp-panel {
+        .mat-exp-header {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+
+            .days {
+                margin-left: 12px;
+            }
+        }
+
+        .mat-exp-content {
+            display: flex;
+            flex-direction: column;
+
+            padding-left: 16px !important;
+            padding-right: 16px !important;
+            padding-top: 4px;
+            padding: 6px;
+
+            .checkbox-days {
+                display: flex;
+                justify-content: center;
+
+                .mat-button-toggle-group {
+                    box-shadow: none;
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+
+                    mat-button-toggle {
+                        margin-left: 4px;
+                        margin-right: 4px;
+                        border: 1px solid #86aed3;
+                        border-radius: 10px;
+                        width: 30px;
+                        height: 30px;
+
+
+
+                        .mat-button-toggle-label {
+                            .mat-button-toggle-label-content {
+                                line-height: 0px !important;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
-.main{
+.main {
     margin: 0px;
     display: flex;
     flex-direction: column;
 
-    .header{
+    .header {
         display: flex;
         justify-content: flex-end;
-        background: peru;
-        
+    }
+
+    .alarmItem {
+        .alarmMainInfo {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-end;
+
+            .time {
+                margin-left: 14px;
+                cursor: pointer;
+            }
+
+            .time-format {
+                margin-bottom: 4px;
+                margin-left: 4px;
+            }
+
+            .selector-switch {
+                display: flex;
+                width: 100%;
+                justify-content: flex-end;
+
+                mat-slide-toggle {
+                    margin-right: 4px;
+                    margin-bottom: 4px;
+                }
+            }
+        }
+
+        .mat-exp-panel {
+            mat-expansion-panel {
+                padding-left: 4px;
+
+                mat-expansion-panel-header {
+                    padding-left: 4px;
+                }
+            }
+        }
     }
 }
 
-.time{
+.sound-selection{
+    margin: 0px;
+    display: flex;
+    flex-direction: column;
+
+    .tone-creation{
+        display: flex;
+        flex-direction: column;
+
+    }
+
+    .sound-option-list {
+        display: flex;
+        flex-direction: column;
+        font-size: 20px;
+    }
+}
+
+.time {
     font-size: 40px;
 }
 
-.time-format{
+.time-format {
     font-size: 15px;
+}
+
+
+.font-size-24 {
+    font-size: 24px;
+}
+
+.mt-8{
+    margin-top: 8px;
+}
+
+.fx-layout-column{
+    display: flex;
+    flex-direction: column;
 }

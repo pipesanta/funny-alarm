@@ -2,14 +2,16 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators'
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class AlarmListService {
 
+  serverHost = environment.server;
 
   screenSizeChanged$ = new BehaviorSubject(undefined);
   commands$ = new BehaviorSubject(undefined);
-  backEndUrl = 'http://localhost:7172'; //todo user ip estatica de la rasp
+  backEndUrl = `http://${this.serverHost}`; //todo user ip estatica de la rasp
 
   constructor(
     private httpClient: HttpClient
