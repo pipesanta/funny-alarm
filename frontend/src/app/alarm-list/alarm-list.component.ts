@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AlarmListService } from './alarm-list.service';
 import { map, filter, debounceTime, tap, takeUntil, mergeMap, timeout, switchMap } from 'rxjs/operators';
 import { fromEvent, Subject, combineLatest, merge, interval, of } from 'rxjs';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'alarm-list',
@@ -14,6 +14,10 @@ export class AlarmListComponent implements OnInit {
   selectedScreem = 'main';
   selectedAlarm: any;
 
+  generalSettingFormGroup = new FormGroup({
+    increaseVolume: new FormControl(false),
+  });
+
   daysOfWeek = [
     { key: 'Dom', label: 'D', value: 'Domingo', active: false },
     { key: 'Lun', label: 'L', value: 'Lunes', active: true },
@@ -24,9 +28,20 @@ export class AlarmListComponent implements OnInit {
     { key: 'Sab', label: 'S', value: 'Sabado', active: false }
   ];
 
+  toneListOptions = [
+    {
+      _id: Date.now(),
+      name: 'La vaca loca dormilona'
+    },
+    {
+      _id: 234435643,
+      name: 'El judio'
+    }
+  ];
+
   alarmList = [
     {
-      _id: 'id_fake',
+      _id: Date.now(),
       time: '12:34',
       format: '24H',
       active: true,
@@ -70,6 +85,7 @@ export class AlarmListComponent implements OnInit {
 
   goToSettings() {
     console.log('HAY QUE IR AL COMPONENTE DE LA CONFIGURARCION');
+    this.selectedScreem = 'settings';
   }
 
   createNewAlarm() {
@@ -147,6 +163,10 @@ export class AlarmListComponent implements OnInit {
 
   updateActiveStatus(alarmId, event: any) {
     console.log('on updateActiveStatus  => ', alarmId, event.checked);
+    this.alarmList.find(e => e._id === alarmId).active = event.checked;
+    console.log(this.alarmList);
+    
+
 
     //method to disactive an alarm
 
@@ -159,7 +179,7 @@ export class AlarmListComponent implements OnInit {
 
   }
 
-  openSelectionToneScreen(alarm){
+  openSelectionToneScreen(alarm) {
     this.selectedScreem = 'soundSelection';
     this.selectedAlarm = alarm;
   }
@@ -168,16 +188,44 @@ export class AlarmListComponent implements OnInit {
     console.log({ alarm, dayKey })
   }
 
-  assignNewAlarmTone(){
+  assignNewAlarmTone() {
 
-    console.log('assignNewAlarmTone ===> ', this.toneNameInput.value, this.toneNameInput.value );
+    console.log('assignNewAlarmTone ===> ', this.toneNameInput.value, this.toneNameInput.value);
     this.selectedScreem = 'main'
   }
 
-  setToneToAlarm(tone){
+  setToneToAlarm(tone) {
     console.log('on setToneToAlarm', tone);
     this.selectedScreem = 'main';
-    
+
   }
 
+
+  removeTone(toneId) {
+    console.log('on RemoveTone ==> ', toneId);
+    this.toneListOptions = this.toneListOptions.filter(t => t._id !== toneId);
+
+
+  }
+
+  addNewAlarmItem() {
+    this.alarmList.push({
+      _id: Date.now(),
+      time: '04:15',
+      format: '24H',
+      active: true,
+      days: ['Lun', 'Mie', 'Sab'],
+      showDetails: false,
+      showDaysToRepeat: false,
+      tone: {
+        name: 'La Vaca loca'
+      }
+    });
+  }
+
+  removeAlarmItem(id){
+    console.log('on removeAlarm item =>', id);
+    this.alarmList = this.alarmList.filter(e => e._id !== id);
+    
+  }
 }

@@ -5,23 +5,14 @@
         </button>
     </div>
 
-    <!-- <mat-form-field>
-        <input matInput [formControl]="alarmName" placeholder="ponga el nombre de la alarma">
-    </mat-form-field>
-
-    <div>
-        <button mat-stroked-button color="primary" (click)="createNewAlarm()">Crear Alarma cualquiera</button>
-    </div> -->
-
-    <!-- <button (click)="open()">Time</button> -->
-    <!-- <input type="time" value="{{selectedTime}}"> -->
-
     <div *ngFor="let alarmItem of alarmList" class="alarmItem">
         <div class="alarmMainInfo">
-            <span class="time" (click)="openTimeSelection(alarmItem)">
+            <span [ngClass]="{'alarm-active': alarmItem.active, 'alarm-inactive': !alarmItem.active}"
+                class="time cursor-pointer" (click)="openTimeSelection(alarmItem)">
                 {{ alarmItem.time }}
             </span>
-            <span class="time-format">
+            <span [ngClass]="{'alarm-active': alarmItem.active, 'alarm-inactive': !alarmItem.active}"
+                class="time-format">
                 {{  alarmItem.format }}
             </span>
             <div class="selector-switch">
@@ -32,8 +23,9 @@
 
         </div>
         <div class="mat-exp-panel">
-            <div class="mat-exp-header">
-                <div class="days">{{ alarmItem.days }}</div>
+            <div class="mat-exp-header mt-8">
+                <div [ngClass]="{'alarm-active': alarmItem.active, 'alarm-inactive': !alarmItem.active}" class="days">
+                    {{ alarmItem.days }}</div>
                 <div class="button-toogle-exp-panel">
                     <button mat-icon-button color="primary" (click)="alarmItem.showDetails = !alarmItem.showDetails">
                         <mat-icon>keyboard_arrow_down</mat-icon>
@@ -51,69 +43,68 @@
                 </div>
                 <div *ngIf="alarmItem.showDaysToRepeat" class="checkbox-days">
                     <div class="mat-button-toggle-group">
-                        <mat-button-toggle *ngFor="let dayOpt of daysOfWeek" value="dayOpt.key"
-                            [checked]="dayOpt.active" (click)="updateDaysToRepeat(alarmItem, dayOpt.key )">
-                            <span>{{ dayOpt.label }}</span>
+                        <mat-button-toggle *ngFor="let dayOpt of daysOfWeek" value="dayOpt.key" color="primary"
+                            class="cursor-pointer" [checked]="dayOpt.active"
+                            (click)="updateDaysToRepeat(alarmItem, dayOpt.key )">
+                            {{ dayOpt.label }}
                         </mat-button-toggle>
                     </div>
                 </div>
-                <div class="sound-selection">
-                    <span class="font-size-24" (click)="openSelectionToneScreen(alarmItem)">sound selection</span>
+                <div class="sound-selection mt-8">
+                    <span class="font-size-24 cursor-pointer" (click)="openSelectionToneScreen(alarmItem)">sound
+                        selection</span>
                 </div>
-                <div>
+                <div *ngIf="alarmItem.selectedSong" class="fx-layout-row aling-center mt-8">
+                    <mat-icon>music_note</mat-icon>
                     <span>{{ alarmItem.tone.name }}</span>
                 </div>
-                <div class="name">
+                <div class="font-size-24 mt-8 cursor-pointer">
                     alarm name
                 </div>
-                <div class="delete-btn">
-                    button to remove
+                <div class="fx-layout-row aling-center justify-content-center mt-8">
+
+                    <button mat-stroked-button color="warn" (click)="removeAlarmItem(alarmItem._id)">
+                        <mat-icon>delete</mat-icon>
+                        Eliminar
+                    </button>
                 </div>
 
 
 
             </div>
-            <!-- <mat-expansion-panel (opened)="true" (closed)="false">
-                <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        {{ alarmItem.days }}
-                    </mat-panel-title>
-                </mat-expansion-panel-header>
-
-                <div>
-                    contenidop
-                </div>
-            </mat-expansion-panel> -->
-
         </div>
 
 
+    </div>
+    <div class="mt-8 justify-content-center">
+        <button mat-mini-fab color="primary" (click)="addNewAlarmItem()">
+            <mat-icon>add</mat-icon>
+        </button>
     </div>
 </div>
 
 <div *ngIf="selectedScreem == 'soundSelection'" class="sound-selection">
 
-    <div *ngIf="!showControlsToCreateTone">
+    <div *ngIf="!showControlsToCreateTone" class="justify-content-center mt-8">
         <button mat-stroked-button color="primary" (click)="showControlsToCreateTone = true">
             Crear uno nuevo nuevo tono
         </button>
-
     </div>
     <div *ngIf="showControlsToCreateTone" class="tone-creation">
 
         <span class="font-size-24 mt-8">Mensaje personalizado</span>
         <mat-form-field>
-            <input matInput placeholder="Nombre" [formControl]="toneNameInput">
+            <input matInput placeholder="Nombre" maxlength="40" [formControl]="toneNameInput">
         </mat-form-field>
         <mat-form-field>
             <textarea matInput [formControl]="toneBodyInput" maxlength="500" rows="5"
                 placeholder="Es hora de levantarse joven"></textarea>
         </mat-form-field>
-        <div>
+        <div class="fx-layout-row space-around">
             <button mat-stroked-button color="primary" (click)="assignNewAlarmTone()">
                 Guardar
             </button>
-            <button mat-stroked-button color="primary" (click)="showControlsToCreateTone = false">
+            <button mat-stroked-button color="warn" (click)="showControlsToCreateTone = false">
                 Cancelar
             </button>
         </div>
@@ -121,15 +112,49 @@
 
     </div>
 
-    <div *ngIf="!showControlsToCreateTone" class="fx-layout-column" >
+    <div *ngIf="!showControlsToCreateTone" class="fx-layout-column">
 
-        <span class="font-size-24">Otros Mensajes almacenados</span>
-        <div *ngFor="let soundOpt of [1,2,3,4,5,6,7,8,9,1,2,3,4,5,6,7,8,9]" class="sound-option-list">
-            <span style="margin: 8px" class="sound-opt" (click)="setToneToAlarm(soundOpt)" >
-                Opcion {{ soundOpt }}
-            </span>
+        <span class="font-size-24 justify-content-center mt-8">
+            Tonos Existentes
+        </span>
+        <div *ngFor="let soundOpt of toneListOptions" class="sound-option-list">
+            <div class="my-8 fx-layout-row">
+                <div (click)="setToneToAlarm(soundOpt._id)" class="w80 aling-center">
+                    <mat-icon class="cursor-pointer">music_note</mat-icon>
+                    <span class="cursor-pointer">{{ soundOpt.name }}</span>
+                </div>
+                <div class="w20 justify-content-end cursor-pointer">
+                    <button mat-mini-fab color="warn" (click)="removeTone(soundOpt._id)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+        <div class="justify-content-center">
+            <button mat-stroked-button color="warn" (click)="selectedScreem = 'main'">Cancelar</button>
         </div>
 
     </div>
+
+</div>
+
+<div *ngIf="selectedScreem == 'settings'" class="fx-layout-column">
+
+    <span class="font-size-24 justify-content-center">Configuraciones generales</span>
+
+    <div [formGroup]="generalSettingFormGroup" class="flex-layout-column mt-8">
+        <mat-checkbox color="primary" formControlName="increaseVolume">
+            Incrementar el volumnen
+        </mat-checkbox>
+
+
+
+
+    </div>
+
+    <button mat-stroked-button color="primary" (click)="selectedScreem = 'main'" class="mt-8">
+        OK
+    </button>
 
 </div>
