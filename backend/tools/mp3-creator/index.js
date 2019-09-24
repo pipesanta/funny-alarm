@@ -4,9 +4,10 @@ const fs = require('fs');
 const http = require('http');
 const https = require('https');
 const urlParse  = require('url').parse;
+const { defer } = require('rxjs');
 
 // start
-googleTTS('hello')
+googleTTS('hola')
     .then(function (url) {
         console.log(url); // https://translate.google.com/translate_tts?...
 
@@ -60,4 +61,12 @@ function downloadFile(url, dest) {
             })
             .end();
     });
+}
+
+exports.createFile = (name, content) => {
+
+    return new Promise(function (resolve, reject) {
+       resolve({name, content})
+    });
+
 }

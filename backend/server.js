@@ -2,7 +2,7 @@
 
 require('dotenv').load();
 const express = require("express");
-const { Observable, concat, of } = require('rxjs')
+const { Observable, concat, of, defer } = require('rxjs')
 const app = express();
 const bodyParser = require('body-parser');
 const port = parseInt(process.env.REST_END_POINT_PORT || '7070');
@@ -12,6 +12,8 @@ const { AlarmRoutes } = require('./routes');
 const routesInDomain = [AlarmRoutes];
 
 const { NeDB } = require('./tools/NeDB');
+const Mp3Creator = require('./tools/mp3-creator');
+
 
 
 app.use( (req, res, next) => {
@@ -55,7 +57,8 @@ function startExpress$() {
 
 concat(
   NeDB.start$(),
-  startExpress$()
+  startExpress$(),
+  defer(() => Mp3Creator.createFile('hola', 'hola este es el contenido') )
 ).subscribe(
   ok => {
     console.log('ok', ok)
