@@ -23,6 +23,7 @@
     "google-tts-api": "0.0.4",
     "moment": "^2.24.0",
     "nedb": "^1.8.0",
+    "node-mp3-player": "^1.0.3",
     "rxjs": "^6.3.3",
     "uuid": "^3.2.1",
     "weeknumber": "^1.1.1"

@@ -13,6 +13,7 @@ const routesInDomain = [AlarmRoutes];
 
 const { NeDB } = require('./tools/NeDB');
 const Mp3Creator = require('./tools/mp3-creator');
+const Mp3Player = require('./tools/mp3-player')
 
 
 
@@ -58,7 +59,9 @@ function startExpress$() {
 concat(
   NeDB.start$(),
   startExpress$(),
-  defer(() => Mp3Creator.createFile('hola', 'hola este es el contenido') )
+  defer(() => Mp3Creator.createFile('hola', 'hola este es el contenido') ),
+  defer(() => Mp3Player.playAudio('hola.mp3'))
+  // defer(() => Mp3Creator.multiple())
 ).subscribe(
   ok => {
     console.log('ok', ok)
