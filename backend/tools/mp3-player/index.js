@@ -1,6 +1,7 @@
 
-const { createAudio } = require('node-mp3-player')
-const Audio = createAudio();
+const sys = require("sys");
+const exec = require("child_process").exec;
+
 
 
 exports.playAudio = (fileName) => {
@@ -8,15 +9,18 @@ exports.playAudio = (fileName) => {
 
     const filepathAndName = __dirname.replace("tools/mp3-player", `resources/mp3/${fileName}`);
 
-    const myFile = await Audio(filepathAndName);
-    await myFile.play() // plays the file
-    await myFile.stop() // stops the file
-    resolve(filepathAndName);
-    // await myFile.volume(0.5)
-    // const currentVolume = await myFile.volume() // 0.5
-    // await myFile.loop()
-    // await myFile.stop()
 
+
+    child = exec(`mpg321 ${filepathAndName}`, (error, stdout, stderr) => {
+      console.log("stdout: " + stdout);
+      console.log("stderr: " + stderr);
+      if (error !== null) {
+        console.log("exec error: " + error);
+        reject(error);
+      }
+      resolve('TERMINADO');
+
+    });
 
 
 

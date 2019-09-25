@@ -61,4 +61,4 @@ typings/
 .next
 
 dataStorage/
-resources/
+resources/mp3/*.mp3

@@ -3,6 +3,7 @@ import { AlarmListService } from './alarm-list.service';
 import { map, filter, debounceTime, tap, takeUntil, mergeMap, timeout, switchMap } from 'rxjs/operators';
 import { fromEvent, Subject, combineLatest, merge, interval, of } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
+import { AmazingTimePickerService } from 'amazing-time-picker';
 
 @Component({
   selector: 'alarm-list',
@@ -63,7 +64,8 @@ export class AlarmListComponent implements OnInit {
   showControlsToCreateTone = false;
 
   constructor(
-    private alarmListService: AlarmListService
+    private alarmListService: AlarmListService,
+    private atp: AmazingTimePickerService
   ) {
 
   }
@@ -148,24 +150,23 @@ export class AlarmListComponent implements OnInit {
 
   openTimeSelection(alarmItem) {
     console.log('on openTimeSelection', alarmItem);
-    // const amazingTimePicker = this.atp.open({
-    //     time:  this.selectedTime,
-    //     theme: 'dark',
-    //     arrowStyle: {
-    //         background: 'red',
-    //         color: 'white'
-    //     }
-    // });
-    // amazingTimePicker.afterClose().subscribe(time => {
-    //     this.selectedTime = time;
-    // });
+    this.atp.open({
+      time: alarmItem.time,
+      changeToMinutes: true,
+      locale: 'es',
+      animation: 'fade',
+      theme: 'material-blue'
+    })
+      .afterClose().subscribe(time => {
+        alarmItem.time =  time;
+      });
   }
 
   updateActiveStatus(alarmId, event: any) {
     console.log('on updateActiveStatus  => ', alarmId, event.checked);
     this.alarmList.find(e => e._id === alarmId).active = event.checked;
     console.log(this.alarmList);
-    
+
 
 
     //method to disactive an alarm
@@ -223,9 +224,9 @@ export class AlarmListComponent implements OnInit {
     });
   }
 
-  removeAlarmItem(id){
+  removeAlarmItem(id) {
     console.log('on removeAlarm item =>', id);
     this.alarmList = this.alarmList.filter(e => e._id !== id);
-    
+
   }
 }

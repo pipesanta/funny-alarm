@@ -11,6 +11,7 @@ import { AlarmListService } from './alarm-list/alarm-list.service';
 import { HttpClientModule } from '@angular/common/http';
 
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import { AmazingTimePickerModule } from 'amazing-time-picker';
 
 
 @NgModule({
@@ -25,7 +26,8 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
     HttpClientModule,
     MaterialModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AmazingTimePickerModule
   ],
   providers: [AlarmListService],
   bootstrap: [AppComponent]

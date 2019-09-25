@@ -46,7 +46,7 @@
                         <mat-button-toggle *ngFor="let dayOpt of daysOfWeek" value="dayOpt.key" color="primary"
                             class="cursor-pointer" [checked]="dayOpt.active"
                             (click)="updateDaysToRepeat(alarmItem, dayOpt.key )">
-                            {{ dayOpt.label }}
+                            <div class="label-inner-button-toggle"> {{ dayOpt.label }} </div>                            
                         </mat-button-toggle>
                     </div>
                 </div>
