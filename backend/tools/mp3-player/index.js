@@ -1,17 +1,15 @@
-
 const sys = require("sys");
 const exec = require("child_process").exec;
 
-
-
-exports.playAudio = (fileName) => {
+exports.playAudio = (files) => {
   return new Promise(async function (resolve, reject) {
+    const fileRoutes = [];
+    const mp3Path = __dirname.replace("tools/mp3-player", `resources/mp3/`)
+    files.forEach((sound)=> {
+      fileRoutes.push(mp3Path+sound+".mp3");
+    });
 
-    const filepathAndName = __dirname.replace("tools/mp3-player", `resources/mp3/${fileName}`);
-
-
-
-    child = exec(`mpg321 ${filepathAndName}`, (error, stdout, stderr) => {
+    child = exec(`mpg321 ${fileRoutes.join(" ")}`, (error, stdout, stderr) => {
       console.log("stdout: " + stdout);
       console.log("stderr: " + stderr);
       if (error !== null) {
@@ -19,15 +17,8 @@ exports.playAudio = (fileName) => {
         reject(error);
       }
       resolve('TERMINADO');
-
     });
 
-
-
-
-
-
   });
-
 
 }

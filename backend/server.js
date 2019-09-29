@@ -8,8 +8,8 @@ const bodyParser = require('body-parser');
 const port = parseInt(process.env.REST_END_POINT_PORT || '7070');
 const endPoint = process.env.REST_HTTP_END_POINT || 'localhost';
 
-const { AlarmRoutes } = require('./routes');
-const routesInDomain = [AlarmRoutes];
+const { AlarmRoutes, SoundsRoutes } = require('./routes');
+const routesInDomain = [AlarmRoutes, SoundsRoutes];
 
 const { NeDB } = require('./tools/NeDB');
 const Mp3Creator = require('./tools/mp3-creator');
@@ -60,9 +60,10 @@ concat(
   NeDB.start$(),
   startExpress$(),
   
-  defer(() => Mp3Creator.createFile('hola1', 'Para que zapatos?. para que hijueputas, si no hay casa.') ),
-  defer(() => Mp3Player.playAudio('hola1.mp3'))
+  // defer(() => Mp3Creator.createFile('hola1', 'Para que zapatos?. para que hijueputas, si no hay casa.') ),
+  defer(() => Mp3Player.playAudio(["1","2","3","4","5","6","7","8","9","10","11","12"])),
   // defer(() => Mp3Creator.multiple())
+  // defer(() => Mp3Creator.createTone('despierta',`The GIT system uses the SSH protocol to transfer data between the server and your local computers. This means that in order to clone the repository you need to have SSH access to your SiteGround hosting account. To see the SSH key, you can click on the Info button next to the entry for your repository Due to security reasons the password for your SSH key will not be displayed in the tool. If you do not know your SSH key password, you will have generate a new key from the SSH/Shell Access tool in cPanel. You can check our detailed SSH tutorial for more information how to manage your SSH keys` ))
 ).subscribe(
   ok => {
     console.log('ok', ok)

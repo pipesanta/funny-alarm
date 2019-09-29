@@ -24,6 +24,8 @@ const { of, Observable } = require("rxjs");
 const { map } = require("rxjs/operators");
 const NeDBClient = require('nedb');
 const alarmsCollection = new NeDBClient({ filename: 'dataStorage/alarm.db', autoload: true });
+const soundsCollection = new NeDBClient({ filename: 'dataStorage/sounds.db', autoload: true });
+
 
 let instance = null;
 
@@ -34,6 +36,7 @@ class NeDB {
    */
   constructor() {
 
+
   }
 
   start$() {
@@ -42,17 +45,20 @@ class NeDB {
 
       console.log('CREANDO INSTANCIA DE NEDB');
       this.client = NeDBClient;
-      this.alarmCollection = alarmsCollection
+      /** @type { NeDBClient } */
+      this.alarmCollection = alarmsCollection;
+      /** @type { NeDBClient } */
+      this.soundsCollection = soundsCollection;
       observer.complete();
     });
   }
 
-
-
 }
 
 module.exports = {
+  /** @returns { NeDB } */
   NeDB,
+  /** @returns { NeDB } */
   singleton() {
     if (!instance) {
       instance = new NeDB();

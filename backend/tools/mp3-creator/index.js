@@ -4,10 +4,14 @@ const fs = require('fs');
 const http = require('http');
 const https = require('https');
 const urlParse = require('url').parse;
-const { defer } = require('rxjs');
 
 
-
+/**
+ * 
+ * @param {string} name el nombre del archivo   
+ * @param {string} content el contenido del archivo
+ * @param {string} lang el lenguaje del contenido del archivo
+ */
 function createFilePromise(name, content, lang = 'ES') {
     return new Promise(function (resolve, reject) {
         googleTTS(content, lang, 0.8)
@@ -23,6 +27,52 @@ function createFilePromise(name, content, lang = 'ES') {
                 reject(err)
             });
     });
+}
+
+/**
+ * 
+ * @param {string} content 
+ */
+function splitContent(content){
+    const contentByWords = content.trim().split(' ');
+    const result = [ '' ];
+    let wordIndex = 0;
+    contentByWords.forEach(word => {
+        const currentWordLength = result[wordIndex].length;
+        if( (currentWordLength + word.length) < 200 ){
+            result[wordIndex] = result[wordIndex] + ' ' + word 
+        }else{
+            wordIndex++;
+            result[wordIndex] = '';
+            result[wordIndex] = word;
+        }
+        result[wordIndex]
+    });
+
+    return result;
+}
+
+/**
+ * 
+ * @param {string} content el contenido del archivo que se va a partir 
+ */
+function splitContentV2(content){
+
+    lenghtContent=content.length;
+    let lenSplitText = Math.ceil(lenghtContent/200);
+    var principalArray = new Array(lenSplitText);
+    let splitContent = Array.from(content.split(""));
+    let k = 0;
+    for (let i=0; i<lenSplitText;i++){
+        principalArray[i]=new Array(200);
+        let j=0;
+        for(j; j<200;j++){
+            principalArray[i][j]=splitContent[k];
+            k+=1; 
+        }
+    }
+    
+    return principalArray;
 }
 
 function downloadFile(url, dest) {
@@ -84,20 +134,14 @@ exports.createFile = (name, content, lang = 'ES') => {
 
 }
 
-exports.multiple = () => {
-    return Promise.all([
-        createFilePromise('1', 'contenido del 1'),
-        createFilePromise('2', 'contenido del 2'),
-        createFilePromise('3', 'contenido del 3'),
-        createFilePromise('4', 'contenido del 4'),
-        createFilePromise('5', 'contenido del 5'),
-        createFilePromise('6', 'contenido del 6'),
-        createFilePromise('7', 'contenido del 7'),
-        createFilePromise('8', 'contenido del 8'),
-        createFilePromise('9', 'contenido del 9'),
-        createFilePromise('10', 'contenido del 10'),
-        createFilePromise('11', 'contenido del 11'),
-        createFilePromise('12', 'contenido del 12'),
-        
-    ])
+exports.createTone = (name, content) => {
+    const parts = splitContent(content);
+    const name_parsed = name.trim(); // todo replace ' ' with _
+    const filesToCreate = [];
+    parts.forEach((part, i) => {
+        filesToCreate.push( createFilePromise(`${name_parsed}_${i}`, part));
+    });
+    return Promise.all(filesToCreate);
 }
+
+
