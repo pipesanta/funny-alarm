@@ -8,6 +8,7 @@
 
 # dependencies
 /node_modules
+dist.zip
 
 # IDEs and editors
 /.idea

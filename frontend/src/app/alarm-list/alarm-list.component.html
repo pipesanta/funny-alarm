@@ -1,11 +1,16 @@
 <div *ngIf="selectedScreem == 'main'" class="main">
+    <!-- HEADER -->
     <div class="header">
         <button mat-icon-button (click)="goToSettings()">
             <mat-icon>settings</mat-icon>
         </button>
     </div>
+    <!-- HEADER -->
 
+    <!-- ALARM LIST -->
     <div *ngFor="let alarmItem of alarmList" class="alarmItem">
+
+        <!-- MAIN ALARM INFO -->
         <div class="alarmMainInfo">
             <span [ngClass]="{'alarm-active': alarmItem.active, 'alarm-inactive': !alarmItem.active}"
                 class="time cursor-pointer" (click)="openTimeSelection(alarmItem)">
@@ -22,6 +27,9 @@
             </div>
 
         </div>
+        <!-- MAIN ALARM INFO -->
+
+        <!-- EXPANSION PANEL FORM DAY AND MORE OPTIONS -->
         <div class="mat-exp-panel">
             <div class="mat-exp-header mt-8">
                 <div [ngClass]="{'alarm-active': alarmItem.active, 'alarm-inactive': !alarmItem.active}" class="days">
@@ -37,15 +45,15 @@
 
                 <div>
                     <mat-checkbox [value]="alarmItem.days.length != 0" color="primary"
-                        (change)="alarmItem.showDaysToRepeat = $event.checked">
+                        (change)="onRepeatChanged(alarmItem._id, $event)">
                         Repetir
                     </mat-checkbox>
                 </div>
                 <div *ngIf="alarmItem.showDaysToRepeat" class="checkbox-days">
                     <div class="mat-button-toggle-group">
                         <mat-button-toggle *ngFor="let dayOpt of daysOfWeek" value="dayOpt.key" color="primary"
-                            class="cursor-pointer" [checked]="dayOpt.active"
-                            (click)="updateDaysToRepeat(alarmItem, dayOpt.key )">
+                            class="cursor-pointer" [checked]="alarmItem.days.includes(dayOpt.key)"
+                            (change)="updateDaysToRepeat(alarmItem._id, dayOpt.key, $event)">
                             <div class="label-inner-button-toggle"> {{ dayOpt.label }} </div>                            
                         </mat-button-toggle>
                     </div>
@@ -73,14 +81,19 @@
 
             </div>
         </div>
+        <!-- EXPANSION PANEL FORM DAY AND MORE OPTIONS -->
 
 
     </div>
+    <!-- ALARM LIST -->
+
+    <!-- BUTTON TO ADD -->
     <div class="mt-8 justify-content-center">
         <button mat-mini-fab color="primary" (click)="addNewAlarmItem()">
             <mat-icon>add</mat-icon>
         </button>
     </div>
+    <!-- BUTTON TO ADD -->
 </div>
 
 <div *ngIf="selectedScreem == 'soundSelection'" class="sound-selection">
