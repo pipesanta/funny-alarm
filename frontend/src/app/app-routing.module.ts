@@ -8,10 +8,6 @@ const routes: Routes = [
     path: '', component: AlarmListComponent
   },
   {
-    path: 'alarm-detail',
-    component: AlarmListComponent
-  },
-  {
     path: '**',
     redirectTo: ''
   }

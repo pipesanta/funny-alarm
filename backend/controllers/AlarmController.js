@@ -71,6 +71,7 @@ exports.updateAlarm = (req, res) => {
   const requestBody = req.body || {};
 
   const idUpdate = requestBody._id;
+  console.log('UPDATE ==>', { ...requestBody} );
 
 
   NeDB.alarmCollection.update({ _id: idUpdate }, {

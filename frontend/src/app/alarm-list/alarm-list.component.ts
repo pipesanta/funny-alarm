@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AlarmListService } from './alarm-list.service';
 import { map, filter, debounceTime, tap, takeUntil, mergeMap, timeout, switchMap } from 'rxjs/operators';
-import { fromEvent, Subject, combineLatest, merge, interval, of } from 'rxjs';
+import { fromEvent, Subject, combineLatest, merge, interval, of, defer, forkJoin } from 'rxjs';
 import { FormControl, FormGroup } from '@angular/forms';
 import { AmazingTimePickerService } from 'amazing-time-picker';
 
@@ -20,13 +20,13 @@ export class AlarmListComponent implements OnInit {
   });
 
   daysOfWeek = [
-    { key: 'Dom', label: 'D', value: 'Domingo', active: false },
-    { key: 'Lun', label: 'L', value: 'Lunes', active: true },
-    { key: 'Mar', label: 'M', value: 'Martes', active: false },
-    { key: 'Mie', label: 'M', value: 'Miercoles', active: true },
-    { key: 'Jue', label: 'J', value: 'Jueves', active: false },
-    { key: 'Vie', label: 'V', value: 'Viernes', active: false },
-    { key: 'Sab', label: 'S', value: 'Sabado', active: false }
+    { key: 'Dom', label: 'D', value: 'Domingo' },
+    { key: 'Lun', label: 'L', value: 'Lunes' },
+    { key: 'Mar', label: 'M', value: 'Martes'  },
+    { key: 'Mie', label: 'M', value: 'Miercoles', },
+    { key: 'Jue', label: 'J', value: 'Jueves' },
+    { key: 'Vie', label: 'V', value: 'Viernes' },
+    { key: 'Sab', label: 'S', value: 'Sabado'}
   ];
 
   toneListOptions = [
@@ -41,18 +41,18 @@ export class AlarmListComponent implements OnInit {
   ];
 
   alarmList = [
-    {
-      _id: Date.now(),
-      time: '12:34',
-      format: '24H',
-      active: true,
-      days: ['Lun', 'Mar', 'Mier'],
-      showDetails: false,
-      showDaysToRepeat: false,
-      tone: {
-        name: 'La Vaca loca'
-      }
-    }
+    // {
+    //   _id: Date.now(),
+    //   time: '12:34',
+    //   format: '24H',
+    //   active: true,
+    //   days: ['Lun', 'Mar', 'Mier'],
+    //   showDetails: false,
+    //   showDaysToRepeat: false,
+    //   tone: {
+    //     name: 'La Vaca loca'
+    //   }
+    // }
   ];
 
   alarmName = new FormControl('');
@@ -150,16 +150,31 @@ export class AlarmListComponent implements OnInit {
 
   openTimeSelection(alarmItem) {
     console.log('on openTimeSelection', alarmItem);
+
     this.atp.open({
       time: alarmItem.time,
       changeToMinutes: true,
       locale: 'es',
       animation: 'fade',
       theme: 'material-blue'
-    })
-      .afterClose().subscribe(time => {
-        alarmItem.time =  time;
-      });
+    }).afterClose().subscribe(
+      (time) => {
+        const update = { _id: alarmItem._id, time: time  };
+        this.alarmListService.updateAlarm$(update)
+          .subscribe(
+            (result) => {
+              alarmItem.time = time;
+              console.log('RESULTADO',result);
+            }
+          )
+        // alarmItem.time = update.time;
+        // console.log( 'DESPUS DE CERRAR ==> ', result);
+      },
+      (error) => {
+        console.error(error)
+      },
+      () => console.log('Termina de actualizar los dias') 
+    )
   }
 
   updateActiveStatus(alarmId, event: any) {
@@ -185,8 +200,33 @@ export class AlarmListComponent implements OnInit {
     this.selectedAlarm = alarm;
   }
 
-  updateDaysToRepeat(alarm, dayKey) {
-    console.log({ alarm, dayKey })
+  updateDaysToRepeat(alarmId, dayKey, event) {
+    const toRemove = event.source.checked === false;
+    // console.log({ alarmId, dayKey });
+    // console.log();
+
+    const alarmToUpdate = this.alarmList.find(item => item._id === alarmId);
+
+    if(toRemove){
+      alarmToUpdate.days = alarmToUpdate.days.filter(day => day !== dayKey);
+    }else{
+      alarmToUpdate.days.push(dayKey);
+    }
+
+    this.alarmListService.updateAlarm$({
+      _id: alarmId,
+      days: alarmToUpdate.days
+    })
+    .subscribe(
+      (result: any) => {
+        console.log(result);
+      },
+      (error) => {
+        console.error(error)
+      },
+      () => console.log('Termina de actualizar los dias') 
+    )
+
   }
 
   assignNewAlarmTone() {
@@ -210,23 +250,57 @@ export class AlarmListComponent implements OnInit {
   }
 
   addNewAlarmItem() {
-    this.alarmList.push({
-      _id: Date.now(),
-      time: '04:15',
-      format: '24H',
-      active: true,
-      days: ['Lun', 'Mie', 'Sab'],
-      showDetails: false,
-      showDaysToRepeat: false,
-      tone: {
-        name: 'La Vaca loca'
-      }
-    });
+    // this.alarmList.push(
+      
+    // );
+    this.alarmListService.createAlarm$({})
+    .pipe(
+      map((result: any) => ({        
+          _id: result._id,
+          time: '00:00',
+          format: '24H',
+          active: true,
+          days: [], // todo
+          showDetails: false,
+          showDaysToRepeat: false,
+          tone: null
+          /*{
+            _id: '3423423',
+            name: 'La Vaca loca'
+          }  */       
+       })),
+
+    )
+    .subscribe(
+      (result: any) => {
+        this.alarmList.push(result);
+      },
+      (error) => {
+        console.error(error)
+      },
+      () => console.log('Termina de crear la alarma') 
+    )
   }
 
   removeAlarmItem(id) {
     console.log('on removeAlarm item =>', id);
     this.alarmList = this.alarmList.filter(e => e._id !== id);
 
+  }
+
+  onRepeatChanged(alarmItemId, event: any){
+    const alarmToUpdate = this.alarmList.find(alarm => alarm._id === alarmItemId);
+    alarmToUpdate.showDaysToRepeat = event.checked;
+    alarmToUpdate.days = [];
+    const update = { _id: alarmItemId, days: [] };
+    this.alarmListService.updateAlarm$(update)
+    .subscribe(
+      result => {
+        console.log(result);
+      },
+      error => console.error(error),
+      () => console.log('TERMINA DE ELIMIAR LA REPETICIONES DE LOS DIAS')
+    )
+    
   }
 }
