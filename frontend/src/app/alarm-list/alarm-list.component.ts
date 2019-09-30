@@ -41,18 +41,7 @@ export class AlarmListComponent implements OnInit {
   ];
 
   alarmList = [
-    // {
-    //   _id: Date.now(),
-    //   time: '12:34',
-    //   format: '24H',
-    //   active: true,
-    //   days: ['Lun', 'Mar', 'Mier'],
-    //   showDetails: false,
-    //   showDaysToRepeat: false,
-    //   tone: {
-    //     name: 'La Vaca loca'
-    //   }
-    // }
+  
   ];
 
   alarmName = new FormControl('');
@@ -71,18 +60,35 @@ export class AlarmListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.searchAllAlarms();
+  }
 
-    this.alarmListService.test$()
-      .subscribe(
-        ok => console.log(ok),
-        error => console.log(error)
-      );
+  searchAllAlarms(){
+    this.alarmListService.getAllAlamrs$()
+    .pipe(
+      map((alarmItems: any[]) => alarmItems.map(i => this.buildAlarmItem(i)) )
+    )
+    .subscribe(
+      (result:any) => { 
+        this.alarmList = result;
+       },
+      error => console.error(error),
+      () => {}
+    );
+  }
 
-
-
-
-
-
+  buildAlarmItem(alarm: any){
+    return {
+      _id: alarm._id,
+      time: alarm.time || '00:00',
+      format: alarm.format || '24H',
+      active: ( alarm.active != null && typeof alarm.active === 'boolean' ) ? alarm.active : true,
+      days: alarm.days || [],
+      showDetails: false,
+      showDaysToRepeat: (alarm.days || []).length > 0,
+      tone: alarm.tone || null,
+      // { name: 'La Vaca loca' }
+    }
   }
 
   goToSettings() {
@@ -284,7 +290,19 @@ export class AlarmListComponent implements OnInit {
 
   removeAlarmItem(id) {
     console.log('on removeAlarm item =>', id);
-    this.alarmList = this.alarmList.filter(e => e._id !== id);
+    this.alarmListService.deleteAlarm$(id)
+    .pipe(
+
+
+    ).subscribe(
+      result => {
+        this.alarmList = this.alarmList.filter(e => e._id !== id);
+        console.log(result);
+      },
+      error => console.error(error),
+      () => {}
+    )
+    
 
   }
 

@@ -11,7 +11,7 @@ export class AlarmListService {
 
   screenSizeChanged$ = new BehaviorSubject(undefined);
   commands$ = new BehaviorSubject(undefined);
-  backEndUrl = `http://${this.serverHost}`; //todo user ip estatica de la rasp
+  backEndUrl = 'http://localhost:7172'; // `http://${this.serverHost}`; //todo user ip estatica de la rasp
 
   constructor(
     private httpClient: HttpClient
@@ -35,6 +35,10 @@ export class AlarmListService {
    deleteAlarm$(id: string){
     return this.httpClient.post(`${this.backEndUrl}/alarm/deleteAlarm`, { _id: id })
 
+   }
+
+   getAllAlamrs$(){
+    return this.httpClient.get(`${this.backEndUrl}/alarm/getAlarms`);
    }
 
 }

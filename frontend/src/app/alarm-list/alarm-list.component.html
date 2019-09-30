@@ -45,6 +45,7 @@
 
                 <div>
                     <mat-checkbox [value]="alarmItem.days.length != 0" color="primary"
+                        [checked]="alarmItem.days.length > 0"
                         (change)="onRepeatChanged(alarmItem._id, $event)">
                         Repetir
                     </mat-checkbox>

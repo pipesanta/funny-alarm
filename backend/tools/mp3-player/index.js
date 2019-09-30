@@ -1,4 +1,3 @@
-const sys = require("sys");
 const exec = require("child_process").exec;
 
 exports.playAudio = (files) => {
