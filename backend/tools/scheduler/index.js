@@ -34,7 +34,7 @@ class CronjobManager {
 
     getOneAlarmById$(id){
         return Observable.create(observer => {
-            NeDB.alarmCollection.findOne({ _id: id } , {}, (err, doc) => {
+            NeDB.alarmCollection.findOne({ _id: id, active: true } , {}, (err, doc) => {
                 if (err) {
                     observer.next(null);
                 }
@@ -129,15 +129,16 @@ class CronjobManager {
     }
 
     updateCronjob$(alarmId) {
-        const alarmTask = this.jobTaks.find(jt => jt.alarm._id === alarmId );
+        const alarmTask = this.jobTaks.find(jt => jts.alarm._id === alarmId );
         return of(alarmTask)
             .pipe(
                 tap(alarmTask => {
-                    if(alarmTask.job){
+                    if(alarmTask && alarmTask.job){
                        alarmTask.job.cancel();
                     }
                 }),
                 mergeMap(() => this.getOneAlarmById$(alarmId)),
+                filter(found => found != null),
                 map(alarm => ({ ...alarm, cronFormat: this.buildCronFormat(alarm) }) ),
                 map(alarmUpdated => {
                     console.log({ alarmUpdated });
