@@ -4,7 +4,7 @@
 const { of, observable } = require("rxjs");
 const { map, tap, mergeMap, catchError } = require("rxjs/operators");
 const dateFormat = require('dateformat');
-
+const Scheduler = require('../tools/scheduler')();
 const { NeDB } = require('../tools/NeDB');
 
 
@@ -52,6 +52,12 @@ exports.createAlarm = (req, res) => {
 
 
   const newAlarm = requestBody;
+  if(!newAlarm.tone){
+    newAlarm.tone = {
+      name: 'Gallo Remix',
+      songs: ['default_0']
+    }
+  }
   //Faltan hacer validaciones 
 
   NeDB.alarmCollection.insert(newAlarm, (err, doc) => {
@@ -74,16 +80,17 @@ exports.updateAlarm = (req, res) => {
   console.log('UPDATE ==>', { ...requestBody} );
 
 
-  NeDB.alarmCollection.update({ _id: idUpdate }, {
-    $set: {
-      ...requestBody
-    }
-  }, { multi: true }, (err, numReplaced) => {
+
+
+  NeDB.alarmCollection.update({ _id: idUpdate }, { $set: { ...requestBody } }, { }, (err, numReplaced) => {
     if (err) {
       res.send(500);
       console.log("Error al actualizar alarma", err);
     }
+    
     res.status(200).json(numReplaced);
+    Scheduler.updateCronjob$(idUpdate).subscribe()
+
     console.log("El documento se actualizó con éxito", idUpdate, numReplaced);
   });
 };

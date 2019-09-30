@@ -16,3 +16,18 @@ exports.sendMessageToArduino = (message)=> {
     
       });
 }
+
+exports.executeCustom = (command) => {
+  return new Promise( (resolve, reject) => {
+    child = exec(command, (error, stdout, stderr) => {
+      console.log("stdout: " + stdout);
+      console.log("stderr: " + stderr);
+      if (error !== null) {
+        console.log("exec error: " + error);
+        reject(error);
+      }
+      resolve('TERMINADO');
+    });
+
+  });
+}

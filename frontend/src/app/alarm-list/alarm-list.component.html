@@ -33,9 +33,10 @@
         <div class="mat-exp-panel">
             <div class="mat-exp-header mt-8">
                 <div [ngClass]="{'alarm-active': alarmItem.active, 'alarm-inactive': !alarmItem.active}" class="days">
-                    {{ alarmItem.days }}</div>
+                    {{ alarmItem.days }}
+                </div>
                 <div class="button-toogle-exp-panel">
-                    <button mat-icon-button color="primary" (click)="alarmItem.showDetails = !alarmItem.showDetails">
+                    <button mat-icon-button color="primary" (click)="showAlarmInfo(alarmItem._id)">
                         <mat-icon>keyboard_arrow_down</mat-icon>
                     </button>
                 </div>
@@ -59,16 +60,18 @@
                         </mat-button-toggle>
                     </div>
                 </div>
-                <div class="sound-selection mt-8">
-                    <span class="font-size-24 cursor-pointer" (click)="openSelectionToneScreen(alarmItem)">sound
-                        selection</span>
-                </div>
-                <div *ngIf="alarmItem.selectedSong" class="fx-layout-row aling-center mt-8">
+                <!-- <div class="sound-selection mt-8">
+                    <span class="font-size-24 cursor-pointer" (click)="openSelectionToneScreen(alarmItem)">
+                        Seleccionar canción
+                    </span>
+                </div> -->
+                <div *ngIf="alarmItem.tone" class="fx-layout-row aling-center cursor-pointer mt-8 font-size-20"
+                    (click)="openSelectionToneScreen(alarmItem._id)">
                     <mat-icon>music_note</mat-icon>
                     <span>{{ alarmItem.tone.name }}</span>
                 </div>
-                <div class="font-size-24 mt-8 cursor-pointer">
-                    alarm name
+                <div *ngIf="alarmItem.name" class="font-size-24 mt-8 cursor-pointer">
+                    {{alarmItem.name}}
                 </div>
                 <div class="fx-layout-row aling-center justify-content-center mt-8">
 
@@ -137,7 +140,7 @@
                     <mat-icon class="cursor-pointer">music_note</mat-icon>
                     <span class="cursor-pointer">{{ soundOpt.name }}</span>
                 </div>
-                <div class="w20 justify-content-end cursor-pointer">
+                <div *ngIf="!soundOpt.default" class="w20 justify-content-end cursor-pointer">
                     <button mat-mini-fab color="warn" (click)="removeTone(soundOpt._id)">
                         <mat-icon>delete</mat-icon>
                     </button>

@@ -13,42 +13,29 @@ import { AmazingTimePickerService } from 'amazing-time-picker';
 export class AlarmListComponent implements OnInit {
 
   selectedScreem = 'main';
-  selectedAlarm: any;
+  selectedAlarmId: any;
 
   generalSettingFormGroup = new FormGroup({
     increaseVolume: new FormControl(false),
   });
 
   daysOfWeek = [
-    { key: 'Dom', label: 'D', value: 'Domingo' },
-    { key: 'Lun', label: 'L', value: 'Lunes' },
-    { key: 'Mar', label: 'M', value: 'Martes'  },
-    { key: 'Mie', label: 'M', value: 'Miercoles', },
-    { key: 'Jue', label: 'J', value: 'Jueves' },
-    { key: 'Vie', label: 'V', value: 'Viernes' },
-    { key: 'Sab', label: 'S', value: 'Sabado'}
+    { order: 0, key: 'Dom', label: 'D', value: 'Domingo' },
+    { order: 1, key: 'Lun', label: 'L', value: 'Lunes' },
+    { order: 2, key: 'Mar', label: 'M', value: 'Martes'  },
+    { order: 3, key: 'Mie', label: 'M', value: 'Miercoles', },
+    { order: 4, key: 'Jue', label: 'J', value: 'Jueves' },
+    { order: 5, key: 'Vie', label: 'V', value: 'Viernes' },
+    { order: 6, key: 'Sab', label: 'S', value: 'Sabado'}
   ];
 
-  toneListOptions = [
-    {
-      _id: Date.now(),
-      name: 'La vaca loca dormilona'
-    },
-    {
-      _id: 234435643,
-      name: 'El judio'
-    }
-  ];
-
-  alarmList = [
-  
-  ];
+  toneListOptions = [];
+  alarmList = [];
 
   alarmName = new FormControl('');
   toneNameInput = new FormControl('');
   toneBodyInput = new FormControl('');
 
-  selectedTime = '18:33';
 
   showControlsToCreateTone = false;
 
@@ -61,6 +48,7 @@ export class AlarmListComponent implements OnInit {
 
   ngOnInit() {
     this.searchAllAlarms();
+    this.searchAllSounds();
   }
 
   searchAllAlarms(){
@@ -75,6 +63,20 @@ export class AlarmListComponent implements OnInit {
       error => console.error(error),
       () => {}
     );
+  }
+
+  searchAllSounds(){
+    this.alarmListService.getAllSounds$()
+    .subscribe(
+      (result: any[]) => {
+        console.log(result);
+        this.toneListOptions = result;
+        
+      },
+      error => console.error(error),
+      () => {}
+    );
+    
   }
 
   buildAlarmItem(alarm: any){
@@ -94,50 +96,6 @@ export class AlarmListComponent implements OnInit {
   goToSettings() {
     console.log('HAY QUE IR AL COMPONENTE DE LA CONFIGURARCION');
     this.selectedScreem = 'settings';
-  }
-
-  createNewAlarm() {
-    // create the alarm object
-    const alarmToCreate = {
-      name: this.alarmName.value,
-      time: '4:20', //this.alarmTime.value,
-      format: 'am', //this.alarmFormat.value,
-      days: ['Thuesday', 'Monday', 'Saturday'], //this.alarmDays.value,
-      tone: 'dinner.mp3', //this.alarmTone.value,
-      status: false //this.alarmStatus.value,
-    }
-    console.log({ ...alarmToCreate });
-
-
-    this.alarmListService.createAlarm$(alarmToCreate)
-      .subscribe(
-        ok => console.log(ok),
-        error => console.log(error),
-        () => console.log('terminado')
-      );
-
-  }
-
-  updateAlarms() {
-    const alarmToUpdate = {
-      //EJEMPLO DE ALARMA
-      _id: 'ajksdhaskjdhasdjashdka', //this.alarmId.value,
-      name: 'Almuerzo', //this.alarmName.value,
-      time: '4:20', //this.alarmTime.value,
-      format: 'am', //this.alarmFormat.value,
-      days: ['Thuesday', 'Monday', 'Saturday'], //this.alarmDays.value,
-      tone: 'dinner.mp3', //this.alarmTone.value,
-      status: false //this.alarmStatus.value,
-    }
-    console.log({ ...alarmToUpdate });
-
-
-    this.alarmListService.updateAlarm$(alarmToUpdate)
-      .subscribe(
-        ok => console.log(ok),
-        error => console.log(error),
-        () => console.log('terminado')
-      );
   }
 
   deleteAlarms(id: string) {
@@ -173,8 +131,6 @@ export class AlarmListComponent implements OnInit {
               console.log('RESULTADO',result);
             }
           )
-        // alarmItem.time = update.time;
-        // console.log( 'DESPUS DE CERRAR ==> ', result);
       },
       (error) => {
         console.error(error)
@@ -185,8 +141,14 @@ export class AlarmListComponent implements OnInit {
 
   updateActiveStatus(alarmId, event: any) {
     console.log('on updateActiveStatus  => ', alarmId, event.checked);
-    this.alarmList.find(e => e._id === alarmId).active = event.checked;
-    console.log(this.alarmList);
+    this.alarmListService.updateAlarm$({_id: alarmId, active: event.checked })
+    .subscribe(
+      (result) => {
+        this.alarmList.find(e => e._id === alarmId).active = event.checked;
+      },
+      error => console.error(error),
+      () => {}
+    );
 
 
 
@@ -201,9 +163,9 @@ export class AlarmListComponent implements OnInit {
 
   }
 
-  openSelectionToneScreen(alarm) {
+  openSelectionToneScreen(alarmId) {
     this.selectedScreem = 'soundSelection';
-    this.selectedAlarm = alarm;
+    this.selectedAlarmId = alarmId;
   }
 
   updateDaysToRepeat(alarmId, dayKey, event) {
@@ -213,11 +175,10 @@ export class AlarmListComponent implements OnInit {
 
     const alarmToUpdate = this.alarmList.find(item => item._id === alarmId);
 
-    if(toRemove){
-      alarmToUpdate.days = alarmToUpdate.days.filter(day => day !== dayKey);
-    }else{
-      alarmToUpdate.days.push(dayKey);
-    }
+    alarmToUpdate.days = toRemove
+      ? alarmToUpdate.days.filter(day => day !== dayKey) // remove item
+      : this.orderDays([...alarmToUpdate.days, dayKey]) //insert item
+
 
     this.alarmListService.updateAlarm$({
       _id: alarmId,
@@ -231,18 +192,52 @@ export class AlarmListComponent implements OnInit {
         console.error(error)
       },
       () => console.log('Termina de actualizar los dias') 
-    )
+    );
+    console.log(this.alarmList);
+    
 
+  }
+
+  orderDays(days: String[]){
+    return this.daysOfWeek.filter(day =>  days.includes(day.key))
+      .sort((a, b) => (a.order - b.order))
+      .map(day => day.key); 
   }
 
   assignNewAlarmTone() {
+    const sound = {
+      name: this.toneNameInput.value,
+      content: this.toneBodyInput.value
+    }
+    this.alarmListService.createSound$(sound)
+    .pipe(
+      tap(result => console.log(result))
 
-    console.log('assignNewAlarmTone ===> ', this.toneNameInput.value, this.toneNameInput.value);
-    this.selectedScreem = 'main'
+    ).subscribe((result) => {
+      this.selectedScreem = 'main';
+    })
+    
   }
 
-  setToneToAlarm(tone) {
-    console.log('on setToneToAlarm', tone);
+  setToneToAlarm(toneId) {
+
+    console.log('on setToneToAlarm', toneId, this.selectedAlarmId);
+
+    const toneSelected = this.toneListOptions.find(sound => sound._id === toneId);
+
+    this.alarmListService.updateAlarm$({ 
+      _id: this.selectedAlarmId,
+      tone: toneSelected
+    } )
+    .subscribe(
+      result => {
+        console.log(result);
+        this.alarmList.find(alarm => alarm._id === this.selectedAlarmId).tone = toneSelected;
+      },
+      error => console.log(error),
+      () => {}
+    )
+
     this.selectedScreem = 'main';
 
   }
@@ -250,35 +245,48 @@ export class AlarmListComponent implements OnInit {
 
   removeTone(toneId) {
     console.log('on RemoveTone ==> ', toneId);
-    this.toneListOptions = this.toneListOptions.filter(t => t._id !== toneId);
+    const toneToRemove = this.toneListOptions.find(t => t._id === toneId);
+
+    this.alarmListService.deleteSound$(toneToRemove)
+    .subscribe(
+      result => {
+        console.log(result);
+        this.toneListOptions = this.toneListOptions.filter(t => t._id !== toneId);
+      },
+      error => console.log(error),
+      () => {}
+    )
+    
 
 
   }
 
   addNewAlarmItem() {
-    // this.alarmList.push(
-      
-    // );
-    this.alarmListService.createAlarm$({})
+    const alarmToCreate = {
+      time: '00:00',      
+      active: true,
+      days: [], // todo     
+      tone: {
+        _id: 'default_0',
+        name: 'Gallo Remix',
+        audios: ['default_0']
+      } 
+    };
+    
+    this.alarmListService.createAlarm$(alarmToCreate)
     .pipe(
       map((result: any) => ({        
           _id: result._id,
-          time: '00:00',
           format: '24H',
-          active: true,
-          days: [], // todo
           showDetails: false,
           showDaysToRepeat: false,
-          tone: null
-          /*{
-            _id: '3423423',
-            name: 'La Vaca loca'
-          }  */       
+          ...alarmToCreate             
        })),
 
     )
     .subscribe(
       (result: any) => {
+        console.log(result);
         this.alarmList.push(result);
       },
       (error) => {
@@ -320,5 +328,13 @@ export class AlarmListComponent implements OnInit {
       () => console.log('TERMINA DE ELIMIAR LA REPETICIONES DE LOS DIAS')
     )
     
+  }
+
+  showAlarmInfo(alarmId: string){
+    this.alarmList.forEach(alarm => {
+      alarm.showDetails = alarm._id === alarmId
+        ? !alarm.showDetails
+        : false;
+    });
   }
 }

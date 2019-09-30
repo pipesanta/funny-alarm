@@ -19,9 +19,9 @@ function createFilePromise(name, content, lang = 'ES') {
                 // console.log(url); // https://translate.google.com/translate_tts?...
                 const route = __dirname.replace("tools/mp3-creator", "resources/mp3")
                 var dest = path.resolve(route, `${name}.mp3`); // file destination
-                resolve(downloadFile(url, dest));
+                return downloadFile(url, dest);
             })
-            .then(() => { })
+            .then(() => resolve(name) )
             .catch(function (err) {
                 console.error(err.stack);
                 reject(err)
@@ -110,7 +110,9 @@ function downloadFile(url, dest) {
             .on('error', function (err) {
                 reject(err);
             })
-            .end();
+            .end(() => {
+                return 
+            });
     });
 }
 

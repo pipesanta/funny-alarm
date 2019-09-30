@@ -15,6 +15,7 @@ const { NeDB } = require('./tools/NeDB');
 const Mp3Creator = require('./tools/mp3-creator');
 const Mp3Player = require('./tools/mp3-player');
 const CommandsExecutor = require('./tools/commands-executor');
+const Scheduler = require('./tools/scheduler')();
 
 
 
@@ -59,8 +60,9 @@ function startExpress$() {
 
 concat(
   NeDB.start$(),
+  Scheduler.start$(),
   startExpress$(),
-  defer(() => CommandsExecutor.sendMessageToArduino('mensaje de prueba') )
+  // defer(() => CommandsExecutor.sendMessageToArduino('mensaje de prueba') )
   
   // defer(() => Mp3Creator.createFile('hola1', 'Para que zapatos?. para que hijueputas, si no hay casa.') ),
   // defer(() => Mp3Player.playAudio([])),

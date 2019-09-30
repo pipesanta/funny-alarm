@@ -41,4 +41,16 @@ export class AlarmListService {
     return this.httpClient.get(`${this.backEndUrl}/alarm/getAlarms`);
    }
 
+   getAllSounds$(){
+    return this.httpClient.get(`${this.backEndUrl}/sound/getSounds`);
+   }
+
+   createSound$(sound){
+    return this.httpClient.post(`${this.backEndUrl}/sound/createSound`, { ...sound });
+   }
+
+   deleteSound$(tone){
+    return this.httpClient.post(`${this.backEndUrl}/sound/deleteSound`, { ...tone });
+   }
+
 }

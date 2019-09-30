@@ -62,3 +62,4 @@ typings/
 
 dataStorage/
 resources/mp3/*.mp3
+!resources/mp3/default*

@@ -5,7 +5,6 @@ import time
 
 global serialRef
 port = "/dev/ttyACM0"
-rate = 9600
 
 message = 'msg' + sys.argv[1]
 
@@ -15,7 +14,7 @@ def sendMessage(msg):
 
 try:
         print("el mensaje a enviar es ", message)
-        serialRef = serial.Serial(port, rate)
+        serialRef = serial.Serial('/dev/ttyACM0', 9600)
 #       serialRef.flushInput()
         sendMessage(message)
 except Exception as e:
