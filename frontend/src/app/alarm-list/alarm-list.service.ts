@@ -11,7 +11,7 @@ export class AlarmListService {
 
   screenSizeChanged$ = new BehaviorSubject(undefined);
   commands$ = new BehaviorSubject(undefined);
-  backEndUrl = 'http://localhost:7172'; // `http://${this.serverHost}`; //todo user ip estatica de la rasp
+  backEndUrl = `http://${this.serverHost}`; //todo user ip estatica de la rasp
 
   constructor(
     private httpClient: HttpClient

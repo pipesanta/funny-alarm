@@ -132,7 +132,11 @@ class CronjobManager {
         const alarmTask = this.jobTaks.find(jt => jt.alarm._id === alarmId );
         return of(alarmTask)
             .pipe(
-                tap(alarmTask => alarmTask.job.cancel()),
+                tap(alarmTask => {
+                    if(alarmTask.job){
+                       alarmTask.job.cancel();
+                    }
+                }),
                 mergeMap(() => this.getOneAlarmById$(alarmId)),
                 map(alarm => ({ ...alarm, cronFormat: this.buildCronFormat(alarm) }) ),
                 map(alarmUpdated => {

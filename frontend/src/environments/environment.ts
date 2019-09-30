@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  server: '192.168.1.19:7172'
+  server: '192.168.1.19:7070'
 };
