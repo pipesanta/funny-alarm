@@ -129,7 +129,7 @@ class CronjobManager {
     }
 
     updateCronjob$(alarmId) {
-        const alarmTask = this.jobTaks.find(jt => jts.alarm._id === alarmId );
+        const alarmTask = this.jobTaks.find(jt => jt.alarm._id === alarmId );
         return of(alarmTask)
             .pipe(
                 tap(alarmTask => {
