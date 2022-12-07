@@ -22,7 +22,7 @@
     "cron-parser": "^2.5.0",
     "dateformat": "^3.0.3",
     "dotenv": "^5.0.1",
-    "express": "^4.16.2",
+    "express": "^4.17.3",
     "google-tts-api": "0.0.4",
     "moment": "^2.24.0",
     "nedb": "^1.8.0",
